@@ -37,7 +37,7 @@ def wiki_summary(topic):
     tokenized_words = [ps.stem(word.lower()) for word in word_tokenize(
         summary_str) if word.lower() not in stop_words and word.isalpha()]
     tfid_matrix = TfidfVectorizer().fit_transform(tokenized_words)
-    feature_names =
+    feature_names = TfidfVectorizer().get_feature_names()
     # store results
     results = [summary_str, summa_summary, sentiment_score, word_count,
                sentence_count, avg_sentence_length]
