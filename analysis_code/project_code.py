@@ -1,6 +1,6 @@
 
 # Need Function that takes URL as input and generates summary statsitics etc
-def wiki_summary_url(topic):
+def wiki_summary(topic):
     # Import required libraries
     # Must install
     # pip install mediawiki.
@@ -8,7 +8,7 @@ def wiki_summary_url(topic):
     # pip install summa
     from mediawiki import MediaWiki
     import nltk
-    from nltk.tokenize import sent_tokenize
+    from nltk.tokenize import sent_tokenize, word_tokenize
     from nltk.corpus import stopwords
     from nltk.stem import PorterStemmer
     from nltk.sentiment.vader import SentimentIntensityAnalyzer
@@ -20,21 +20,33 @@ def wiki_summary_url(topic):
     page = MediaWiki().page(topic)
     # generate summary in str for topic (given input)
     summary_str = page.summary
+    summa_summary = summarize(page, ratio=0.2, words=None)
     # compute summary statistics
     sentences = sent_tokenize(summary_str)
     word_count = len(nltk.word_tokenize(summary_str))
     sentence_count = len(sentences)
     avg_sentence_length = word_count / sentence_count
-   # sentiment analysis
+    # sentiment analysis
     sid = SentimentIntensityAnalyzer()
-    score = sid.polarity_scores(summary_str)
-
+    sentiment_score = sid.polarity_scores(summary_str)\
+        # extracting links
+    links = page.links
+    # keyword extraction
+    stop_words = set(stopwords.words('english)'))
+    ps = PorterStemmer()
+    tokenized_words = [ps.stem(word.lower()) for word in word_tokenize(
+        summary_str) if word.lower() not in stop_words and word.isalpha()]
+    tfid_matrix = TfidfVectorizer().fit_transform(tokenized_words)
+    feature_names =
     # store results
-    results = [summary_str, score, word_count,
+    results = [summary_str, summa_summary, sentiment_score, word_count,
                sentence_count, avg_sentence_length]
     # return statistics
     return results
+
     # print statistics
+    # for i in range(len(results)):
+    #     print(f"{results[i]}")
     # print(summary_str)
     # print(f"Sentiment Score: {score}")
     # print(f"Word count: {word_count}")
@@ -43,12 +55,13 @@ def wiki_summary_url(topic):
 
 
 def main():
-    wiki_summary_url('Collapse of Silicon Valley Bank')
-    wiki_summary_url('Enron scandal')
-    wiki_summary_url('Bankruptcy of Lehman Brothers')
-    wiki_summary_url('Bankruptcy of FTX')
-    wiki_summary_url('WeWork')
-    wiki_summary_url('Theranos')
+    # results = [summary_str, senitment_score, word_count,sentence_count, avg_sentence_length]
+    svb = wiki_summary('Collapse of Silicon Valley Bank')
+    enron = wiki_summary('Enron scandal')
+    lehman = wiki_summary('Bankruptcy of Lehman Brothers')
+    ftx = wiki_summary('Bankruptcy of FTX')
+    wework = wiki_summary('WeWork')
+    theranos = wiki_summary('Theranos')
 
 
 if __name__ == "__main__":
