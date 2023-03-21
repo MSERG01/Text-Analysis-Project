@@ -1,6 +1,6 @@
+import nltk
 from mediawiki import MediaWiki
 from summa import summarizer, keywords
-import nltk
 from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.probability import FreqDist
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
@@ -8,9 +8,9 @@ from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import TfidfVectorizer
+from thefuzz import fuzz
 
 
-# Need Function that takes URL as input and generates summary statistics etc
 def summarize_wiki(topic):
     '''
     Takes topic as a string and pulls data from MediaWiki 
@@ -100,15 +100,13 @@ def summary_statistics(dict, result_type):
     return result_statistics
 
 
-def sentiment_analyzer(dict, result_type):
+def sentiment_analyzer(text):
     '''
-    generalized function for sentiment analysis built to take results from wiki_summary function
-
-
+    generalized function for sentiment analysis built 
     '''
     # sentiment analysis
     sentiment = SentimentIntensityAnalyzer()
-    sentiment_scores = sentiment.polarity_scores(dict[result_type])
+    sentiment_scores = sentiment.polarity_scores(text)
     return sentiment_scores
 
 
@@ -132,16 +130,19 @@ def calculate_cosine_similarity(summary1, summary2):
     vectorized_summary2 = vectorize.fit_transform([processed_summary2])
 
     # calculate cosine simialrity between vectors
-    cosine_similarity = cosine_similarity(
+    cosine_sim = cosine_similarity(
         vectorized_summary1, vectorized_summary2)
 
-    return cosine_similarity
+    return cosine_sim
+
+
+def text_similarity(text1, text2):
+    return fuzz.token_sort_ratio(text1, text2)
 
 
 def main():
 
     # from nltk.stem import PorterStemmer
-
     # Import required libraries
     # Must install
     # pip install mediawiki.
@@ -157,19 +158,31 @@ def main():
               'theranos': 'Theranos'
               }
 
-    # Mock Analysis for SVB
+    # Mock Analysis for SVB v Enron
     svb = summarize_wiki(topics['svb'])
-    svb_summary_stats = summary_statistics(svb, "Wiki Summary")
-    print(svb_summary_stats)
-    print(sentiment_analyzer(svb, "Wiki Summary"))
-    print(sentiment_analyzer(svb, "Summa Summary"))
-    print(sentiment_analyzer(svb, "Summa Keywords"))
+    svb_text_summary = svb["Summa Summary"]
+    enron = summarize_wiki(topics['enron'])
+    enron_text_summary = enron["Summa Summary"]
 
-    # enron = summarize_wiki('Enron scandal')
+    svb_keywords = svb["Summa Keywords"]
+    enron_keywords = enron["Summa Keywords"]
+    print(sentiment_analyzer(svb_keywords))
+    print(sentiment_analyzer(enron_keywords))
+
+    # print(text_similarity(svb_text_summary, enron_text_summary))
+
+    # print(calculate_cosine_similarity(svb_text_summary, enron_text_summary))
+
+    # print(svb_text_summary)
+    # print(enron_text_summary)
+    # svb_summary_stats = summary_statistics(svb, "Wiki Summary")
+    # print(svb_summary_stats)
+
     # lehman = summarize_wiki('Bankruptcy of Lehman Brothers')
     # ftx = summarize_wiki('Bankruptcy of FTX')
     # wework = summarize_wiki('WeWork')
     # theranos = summarize_wiki('Theranos')
+    # worldcom = summarize_wiki("WorldCom scandal")
 
 
 if __name__ == "__main__":
