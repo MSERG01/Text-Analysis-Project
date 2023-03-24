@@ -157,23 +157,31 @@ def gpt_text_generation(sequence):
 
 
 def trim_summary(summary):
-    ''''
+    '''
     Used to provide shorter input summary for GPT_text_generation summary
     '''
     # split summary into list of sentences using re library
     sentences = re.split('[.!?]', summary)
 
-    # count the nuber of words in the first x sentences (adjust size)
-    word_count = sum(len(sentences.split() for sentence in sentences[:10]))
+    # count the number of words in the first x sentences (adjust size)
+    word_count = sum(len(sentence.split()) for sentence in sentences[:5])
 
     # find nearest sentence following the xth word
     index = 0
-    for i, sentence in enumerate(sentences[10:]):
-        if len(sentence.split() + word_count) > 10:
+    for i, sentence in enumerate(sentences[5:]):
+        if len(sentence.split()) + word_count > 50:
             index = i
             break
-    new_text = " ".join(sentences[:200+index+1])
+
+    # join the first x sentences and the nearest sentence
+    new_text = ' '.join(sentences[:5+index+1])
+
+    # append the phrase "This results in"
     new_text += " This results in, "
+
+    # add the remaining sentences
+    new_text += ' '.join(sentences[5+index+1:])
+
     return new_text
 
 
