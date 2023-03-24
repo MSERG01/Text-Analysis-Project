@@ -175,6 +175,9 @@ def summarize_all(topics):
 
 
 def main():
+    sample_topics = {'svb': "Collapse of Silicon Valley Bank",
+                     'enron': 'Enron Scandal',
+                     'lehman': 'Bankruptcy of Lehman Brothers'}
 
     all_topics = {'svb': "Collapse of Silicon Valley Bank",
                   'enron': 'Enron Scandal',
@@ -186,8 +189,10 @@ def main():
                   'ltcm': "Long-Term Capital Management"
                   }
 
-    topics_summary_dictionary = summarize_all(all_topics)
-    pprint.pprint(topics_summary_dictionary)
+    # topics_summary_dictionary = summarize_all(all_topics)
+    sample_topics_summary_dictionary = summarize_all(sample_topics)
+    # pprint.pprint(topics_summary_dictionary)
+    pprint.pprint(sample_topics_summary_dictionary)
 
 
 if __name__ == "__main__":
