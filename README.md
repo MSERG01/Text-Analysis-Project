@@ -7,6 +7,7 @@ Please read the [instructions](instructions.md).
 
 What data source(s) did you use? What technique(s) did you use to process or analyze them? What did you hope to create or learn through this project?
 
+# Project Overview - Data Sources, techniques, and learning goal. 
 For this assignment I used Wikipedia data from infamous business failures, frauds, or collapses using the MediaWiki API. These are denotes in def main() under a topics dictionary that pairs the case key (ex. 'svb) to a more specific wikipedia topic such as "Collapse of Silicon Valley Bank".
 
 I wanted to learn how to use API's and other natural language processing libraries to manipulate text. 
@@ -17,18 +18,23 @@ results = {'Wiki Summary': summary_wiki,
                "Summa Keywords as List": summa_keywords_list,
                "Summa Keywords": summa_keywords,
                "Links": links}
-And from there I experimented with different 
+And from there I experimented with different techniques to process and analyze - these included stop-word removal and word stemming, summary statistics and words frequencies, sentiment analysis, text-similarity, markov analysis, and lastly using GPT-2 model to generate text based on the input summary from previous functions. 
 
-
-
-
+My goal was to learn how to use these tools - and learn how to search for the tools needed (find new libraries and take advantage of open source) - as opposed to preforming one specific analysis. 
 
 2. Implementation (~1-2 paragraphs + screenshots)
 
 Describe your implementation at a system architecture level. You should NOT walk through your code line by line, or explain every function (we can get that from your docstrings). Instead, talk about the major components, algorithms, data structures and how they fit together. You should also discuss at least one design decision where you had to choose between multiple alternatives, and explain why you made the choice. Use screenshots to describe how you used ChatGPT to help you or learn new things.
 
+# Implementation - Approach, Algo 
 
 
+
+
+
+
+
+image.png
 
 
 

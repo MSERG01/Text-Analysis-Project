@@ -13,6 +13,7 @@ from thefuzz import fuzz
 import markovify
 import torch
 from transformers import GPT2LMHeadModel, GPT2Tokenizer
+import re
 
 
 def summarize_wiki(topic):
@@ -70,7 +71,7 @@ def process_words(words_list):
     return stemmed_words
 
 
-def summary_statistics(dict_input, result_type):
+def summary_statistics(summary):
     '''
     1) Uses nltk to tokenize sentences and words 
     2) Calls remove_stop_words function to clean up words list 
@@ -78,8 +79,8 @@ def summary_statistics(dict_input, result_type):
 
     '''
     # Tokenize the text summary from previous function into sentences and words
-    sentences = sent_tokenize(dict_input[result_type])
-    words = word_tokenize(dict_input[result_type])
+    sentences = sent_tokenize(summary)
+    words = word_tokenize(summary)
     # print(words)
     # Remove stopwords from list calling remove_stop_words() function
     words = process_words(words)
@@ -119,8 +120,9 @@ def text_similarity(text1, text2):
 
 
 def markovify_funct(summary):
-    # could be used to write "MOCK SCANDAL" from what it learns from summary and keywords of these scandals
-
+    ''''
+   uses markovify library to PRINT 10 probability bases sentences based on summary provided
+   '''
     # 1) Get Raw Text as String
     text = summary  # redundant but helpful if several summaries are inputted
 
@@ -139,6 +141,10 @@ def gpt_text_generation(sequence):
     tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
     model = GPT2LMHeadModel.from_pretrained('gpt2')
 
+    prompt = " This resulted in, "
+
+    sequence = sequence + prompt
+
     inputs = tokenizer.encode(sequence, return_tensors='pt')
 
     # set output parameters
@@ -148,6 +154,27 @@ def gpt_text_generation(sequence):
     text_output = tokenizer.decode(outputs[0], skip_special_tokens=True)
 
     return text_output
+
+
+def trim_summary(summary):
+    ''''
+    Used to provide shorter input summary for GPT_text_generation summary
+    '''
+    # split summary into list of sentences using re library
+    sentences = re.split('[.!?]', summary)
+
+    # count the nuber of words in the first x sentences (adjust size)
+    word_count = sum(len(sentences.split() for sentence in sentences[:10]))
+
+    # find nearest sentence following the xth word
+    index = 0
+    for i, sentence in enumerate(sentences[10:]):
+        if len(sentence.split() + word_count) > 10:
+            index = i
+            break
+    new_text = " ".join(sentences[:200+index+1])
+    new_text += " This results in, "
+    return new_text
 
 
 def summarize_all(topics):
@@ -174,10 +201,31 @@ def summarize_all(topics):
     return results
 
 
+def stats_all(topics, key):
+    ''''
+    1) Uses nltk to tokenize sentences and words 
+    2) Calls remove_stop_words function to clean up words list 
+    3) Produce summary results from specified dictionary
+    '''
+    results = {}
+    for topic in topics:
+        results[topic] = summary_statistics(topics[topic][key])
+    return results
+
+
+def sentiment_all(topics, key):
+    ''''
+    1) Uses nltk to tokenize sentences and words 
+    2) Calls remove_stop_words function to clean up words list 
+    3) Produce summary results from specified dictionary
+    '''
+    results = {}
+    for topic in topics:
+        results[topic] = sentiment_analyzer(topics[topic][key])
+    return results
+
+
 def main():
-    sample_topics = {'svb': "Collapse of Silicon Valley Bank",
-                     'enron': 'Enron Scandal',
-                     'lehman': 'Bankruptcy of Lehman Brothers'}
 
     all_topics = {'svb': "Collapse of Silicon Valley Bank",
                   'enron': 'Enron Scandal',
@@ -189,10 +237,57 @@ def main():
                   'ltcm': "Long-Term Capital Management"
                   }
 
+    ''''
+    1. Specify topic ticker (ex. 'svb') 
+    all_topics = {'svb': "Collapse of Silicon Valley Bank",
+                  'enron': 'Enron Scandal',
+                  'lehman': 'Bankruptcy of Lehman Brothers',
+                  'ftx': 'Bankruptcy of FTX',
+                  'wework': 'WeWork',
+                  'theranos': 'Theranos',
+                  'worldcom': "Worldcom Scandal",
+                  'ltcm': "Long-Term Capital Management"
+                  }
+    
+    2. Specify desired result(s)
+    results = {'Wiki Summary': summary_wiki,
+               "Summa Summary": summa_summary,
+               "Summa Keywords as List": summa_keywords_list,
+               "Summa Keywords": summa_keywords,
+               "Links": links}
+    
+    3. For example - to get svb wiki summary the following would be used
+    topics_summary_dictionary['svb']['Wiki Summary']
+    '''
+
+    # Initially store all data in dictionary to use in later analysis  (see docstring)
     topics_summary_dictionary = summarize_all(all_topics)
-    sample_topics_summary_dictionary = summarize_all(sample_topics)
-    pprint.pprint(topics_summary_dictionary['svb'])
-    pprint.pprint(sample_topics_summary_dictionary['enron'])
+    print("-"*50)
+    pprint.pprint(topics_summary_dictionary['svb']['Wiki Summary'])
+
+    # use stats_all to return dictionary of each topics and their key stats
+    print("-"*50)
+    pprint.pprint(stats_all(topics_summary_dictionary, 'Summa Summary'))
+
+    # Sentiment of all summa summaries
+    print("-"*50)
+    pprint.pprint(sentiment_all(topics_summary_dictionary, 'Summa Summary'))
+
+    # sample of text_similarity function using dictionary
+    print("-"*50)
+    pprint.pprint(text_similarity(
+        topics_summary_dictionary['svb']['Summa Summary'], topics_summary_dictionary['ftx']['Summa Summary']))
+
+    # Uses Markov function to generate 10 sentences based on inputted summary.
+    print("-"*50)
+    print("The following is randomly generated sentences based off input")
+    markovify_funct(topics_summary_dictionary['wework']['Summa Summary'])
+
+    # Lastly use GPT2 preloaded model to generate text based on previous characteristics
+    # The Last 200 words after "THIS RESULTS IN" are generated by the code and were not summarized by Wikipedia
+    print("-"*50)
+    pprint.pprint(trim_summary(
+        topics_summary_dictionary['theranos']['Wiki Summary']))
 
 
 if __name__ == "__main__":
