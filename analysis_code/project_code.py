@@ -11,6 +11,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import TfidfVectorizer
 from thefuzz import fuzz
 import markovify
+import torch
+from transformers import GPT2LMHeadModel, GPT2Tokenizer
 
 
 def summarize_wiki(topic):
@@ -111,13 +113,6 @@ def sentiment_analyzer(text):
     return sentiment_scores
 
 
-def convert_to_string(word_list):
-    '''
-    Converts a list of individual words into a string (split by by space)
-    '''
-    return ' '.join(word_list)
-
-
 def text_similarity(text1, text2):
     '''Uses fuzz library to calc similarity between tow texts with score out of 100'''
     return fuzz.token_sort_ratio(text1, text2)
@@ -137,62 +132,62 @@ def markovify_funct(summary):
         print(text_model.make_sentence())
 
 
+def gpt_text_generation(sequence):
+
+    # initialize tokenizer and model from pretrained GPT2 Model
+
+    tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
+    model = GPT2LMHeadModel.from_pretrained('gpt2')
+
+    inputs = tokenizer.encode(sequence, return_tensors='pt')
+
+    # set output parameters
+    outputs = model.generate(inputs, max_length=200, do_sample=True)
+
+    # decode array of tokens into words
+    text_output = tokenizer.decode(outputs[0], skip_special_tokens=True)
+
+    return text_output
+
+
+def summarize_all(topics):
+    '''
+    summarize_all takes dictionary of inputs as input and outputs dictionary with these results and stores them as dictionary pair 
+    results = {'Wiki Summary': summary_wiki,
+               "Summa Summary": summa_summary,
+               "Summa Keywords as List": summa_keywords_list,
+               "Summa Keywords": summa_keywords,
+               "Links": links}
+
+    for example  --> 'svb: {'Wiki Summary': summary_wiki,
+               "Summa Summary": summa_summary,
+               "Summa Keywords as List": summa_keywords_list,
+               "Summa Keywords": summa_keywords,
+               "Links": links} , 'enron': ....
+
+    this calls summarize wiki function and returns dictionary with data for every subsequent analysis
+
+    '''
+    results = {}
+    for topic in topics:
+        results[topic] = summarize_wiki(topics[topic])
+    return results
+
+
 def main():
 
-    # from nltk.stem import PorterStemmer
-    # Import required libraries
-    # Must install
-    # pip install mediawiki.
-    # pip install scikit-learn
-    # pip install summa
-    # pip instal nltk
+    all_topics = {'svb': "Collapse of Silicon Valley Bank",
+                  'enron': 'Enron Scandal',
+                  'lehman': 'Bankruptcy of Lehman Brothers',
+                  'ftx': 'Bankruptcy of FTX',
+                  'wework': 'WeWork',
+                  'theranos': 'Theranos',
+                  'worldcom': "Worldcom Scandal",
+                  'ltcm': "Long-Term Capital Management"
+                  }
 
-    # topics - pairs ticker abbreviation to specific wikipedia topic to avoid unrelated data
-
-    topics = {'svb': "Collapse of Silicon Valley Bank",
-              'enron': 'Enron Scandal',
-              'lehman': 'Bankruptcy of Lehman Brothers',
-              'ftx': 'Bankruptcy of FTX',
-              'wework': 'WeWork',
-              'theranos': 'Theranos',
-              'worldcom': "Worldcom Scandal",
-              'ltcm': "Long-Term Capital Management"
-              }
-
-    # Mock Analysis for SVB
-    svb = summarize_wiki(topics['svb'])
-    svb_text_summary = svb["Summa Summary"]
-    svb_wiki_summary = svb["Wiki Summary"]
-    svb_keywords = svb["Summa Keywords"]
-    print(sentiment_analyzer(svb_keywords))
-    svb_summary_stats = summary_statistics(svb, "Wiki Summary")
-    # print(svb_keywords)
-    print(svb_summary_stats)
-    # print(svb_text_summary)
-    print("We are Here")
-    markovify_funct(svb_text_summary)
-
-    # SVB v Enron Wiki Summary Similarity
-    enron = summarize_wiki(topics['enron'])
-    enron_wiki_summary = enron['Wiki Summary']
-
-    # enron = summarize_wiki(topics['enron'])
-    # enron_text_summary = enron["Summa Summary"]
-    # pprint.pprint(svb_keywords)
-    # enron_keywords = enron["Summa Keywords"]
-    # pprint.pprint(enron_keywords)
-    # print(sentiment_analyzer(enron_keywords))
-    # print(text_similarity(svb_text_summary, enron_text_summary))
-    # print(calculate_cosine_similarity(svb_text_summary, enron_text_summary))
-    # print(svb_text_summary)
-    # print(enron_text_summary)
-    #
-    # print(svb_summary_stats)
-    # lehman = summarize_wiki('Bankruptcy of Lehman Brothers')
-    # ftx = summarize_wiki('Bankruptcy of FTX')
-    # wework = summarize_wiki('WeWork')
-    # theranos = summarize_wiki('Theranos')
-    # worldcom = summarize_wiki("WorldCom scandal")
+    topics_summary_dictionary = summarize_all(all_topics)
+    pprint.pprint(topics_summary_dictionary)
 
 
 if __name__ == "__main__":

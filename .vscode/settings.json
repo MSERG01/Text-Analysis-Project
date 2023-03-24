@@ -3,6 +3,7 @@
         "ltcm",
         "markovify",
         "nltk",
+        "pretrained",
         "sklearn",
         "stopwords",
         "tfid",
