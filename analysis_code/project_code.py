@@ -1,4 +1,5 @@
 import nltk
+import pprint
 from mediawiki import MediaWiki
 from summa import summarizer, keywords
 from nltk.tokenize import sent_tokenize, word_tokenize
@@ -9,6 +10,7 @@ from nltk.stem import PorterStemmer
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import TfidfVectorizer
 from thefuzz import fuzz
+import markovify
 
 
 def summarize_wiki(topic):
@@ -25,7 +27,7 @@ def summarize_wiki(topic):
     page = MediaWiki().page(topic)
 
     # generate summary using MediaWiki built in Function
-    summary_str = page.summary
+    summary_wiki = page.summary
 
     # generate summary and keywords extraction using summa and store keywords in list
     full_content = page.content
@@ -37,7 +39,7 @@ def summarize_wiki(topic):
     links = page.links
 
     # store results
-    results = {'Wiki Summary': summary_str,
+    results = {'Wiki Summary': summary_wiki,
                "Summa Summary": summa_summary,
                "Summa Keywords as List": summa_keywords_list,
                "Summa Keywords": summa_keywords,
@@ -50,7 +52,6 @@ def process_words(words_list):
     Function used to clean up a list of words by removing stop words (the, of etc and ensure words are alphabetical)
     2) Stem words for further accuracy
     '''
-
     stop_words = set(stopwords.words('english'))
     filtered_words = []
     for word in words_list:
@@ -67,25 +68,25 @@ def process_words(words_list):
     return stemmed_words
 
 
-def summary_statistics(dict, result_type):
+def summary_statistics(dict_input, result_type):
     '''
     1) Uses nltk to tokenize sentences and words 
     2) Calls remove_stop_words function to clean up words list 
-    3) Produce sumamry results from specified dictionary
+    3) Produce summary results from specified dictionary
 
     '''
     # Tokenize the text summary from previous function into sentences and words
-    sentences = sent_tokenize(dict[result_type])
-    words = word_tokenize(dict[result_type])
-
+    sentences = sent_tokenize(dict_input[result_type])
+    words = word_tokenize(dict_input[result_type])
+    # print(words)
     # Remove stopwords from list calling remove_stop_words() function
     words = process_words(words)
 
     # create dictionary of summary results
-    word_count = len(nltk.word_tokenize(dict[result_type]))
+    word_count = len(words)
     sentence_count = len(sentences)
     unique_word_count = len(set(words))
-    avg_sentence_length = word_count / sentence_count
+    avg_sentence_length = round((word_count / sentence_count), 0)
 
     # Generate frequency distribution for words
     word_freq_dist = FreqDist(words)
@@ -110,34 +111,30 @@ def sentiment_analyzer(text):
     return sentiment_scores
 
 
-def calculate_cosine_similarity(summary1, summary2):
+def convert_to_string(word_list):
     '''
-    Will take two summary texts - from previous functions -- 
-    uses tfid vectorize from sklearn and calculates the cosine similarity using simialrity between vectors
-
+    Converts a list of individual words into a string (split by by space)
     '''
-    # tokenize summaries
-    tokenized_text1 = sent_tokenize(summary1)
-    tokenized_text2 = sent_tokenize(summary2)
-
-    # process the words
-    processed_summary1, processed_summary2 = "".join(process_words(
-        tokenized_text1)), " ".join(process_words(tokenized_text2))
-
-    # Vectorize the processed text
-    vectorize = TfidfVectorizer()
-    vectorized_summary1 = vectorize.fit_transform([processed_summary1])
-    vectorized_summary2 = vectorize.fit_transform([processed_summary2])
-
-    # calculate cosine simialrity between vectors
-    cosine_sim = cosine_similarity(
-        vectorized_summary1, vectorized_summary2)
-
-    return cosine_sim
+    return ' '.join(word_list)
 
 
 def text_similarity(text1, text2):
+    '''Uses fuzz library to calc similarity between tow texts with score out of 100'''
     return fuzz.token_sort_ratio(text1, text2)
+
+
+def markovify_funct(summary):
+    # could be used to write "MOCK SCANDAL" from what it learns from summary and keywords of these scandals
+
+    # 1) Get Raw Text as String
+    text = summary  # redundant but helpful if several summaries are inputted
+
+    # 2) Build Model
+    text_model = markovify.Text(text)
+
+    # 3) Print Randomly generated text (10 sentences)
+    for i in range(10):
+        print(text_model.make_sentence())
 
 
 def main():
@@ -150,34 +147,47 @@ def main():
     # pip install summa
     # pip instal nltk
 
+    # topics - pairs ticker abbreviation to specific wikipedia topic to avoid unrelated data
+
     topics = {'svb': "Collapse of Silicon Valley Bank",
               'enron': 'Enron Scandal',
               'lehman': 'Bankruptcy of Lehman Brothers',
               'ftx': 'Bankruptcy of FTX',
               'wework': 'WeWork',
-              'theranos': 'Theranos'
+              'theranos': 'Theranos',
+              'worldcom': "Worldcom Scandal",
+              'ltcm': "Long-Term Capital Management"
               }
 
-    # Mock Analysis for SVB v Enron
+    # Mock Analysis for SVB
     svb = summarize_wiki(topics['svb'])
     svb_text_summary = svb["Summa Summary"]
-    enron = summarize_wiki(topics['enron'])
-    enron_text_summary = enron["Summa Summary"]
-
+    svb_wiki_summary = svb["Wiki Summary"]
     svb_keywords = svb["Summa Keywords"]
-    enron_keywords = enron["Summa Keywords"]
     print(sentiment_analyzer(svb_keywords))
-    print(sentiment_analyzer(enron_keywords))
+    svb_summary_stats = summary_statistics(svb, "Wiki Summary")
+    # print(svb_keywords)
+    print(svb_summary_stats)
+    # print(svb_text_summary)
+    print("We are Here")
+    markovify_funct(svb_text_summary)
 
+    # SVB v Enron Wiki Summary Similarity
+    enron = summarize_wiki(topics['enron'])
+    enron_wiki_summary = enron['Wiki Summary']
+
+    # enron = summarize_wiki(topics['enron'])
+    # enron_text_summary = enron["Summa Summary"]
+    # pprint.pprint(svb_keywords)
+    # enron_keywords = enron["Summa Keywords"]
+    # pprint.pprint(enron_keywords)
+    # print(sentiment_analyzer(enron_keywords))
     # print(text_similarity(svb_text_summary, enron_text_summary))
-
     # print(calculate_cosine_similarity(svb_text_summary, enron_text_summary))
-
     # print(svb_text_summary)
     # print(enron_text_summary)
-    # svb_summary_stats = summary_statistics(svb, "Wiki Summary")
+    #
     # print(svb_summary_stats)
-
     # lehman = summarize_wiki('Bankruptcy of Lehman Brothers')
     # ftx = summarize_wiki('Bankruptcy of FTX')
     # wework = summarize_wiki('WeWork')

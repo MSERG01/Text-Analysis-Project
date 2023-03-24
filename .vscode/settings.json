@@ -1,8 +1,16 @@
 {
     "cSpell.words": [
+        "ltcm",
+        "markovify",
         "nltk",
+        "sklearn",
         "stopwords",
+        "tfid",
+        "Tfidf",
+        "thefuzz",
         "theranos",
+        "Vectorize",
+        "Vectorizer",
         "wework",
         "worldcom"
     ]
