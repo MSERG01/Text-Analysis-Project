@@ -7,7 +7,7 @@ Please read the [instructions](instructions.md).
 
 What data source(s) did you use? What technique(s) did you use to process or analyze them? What did you hope to create or learn through this project?
 
-# Project Overview - Data Sources, techniques, and learning goal. 
+### Project Overview - Data Sources, techniques, and learning goal. 
 For this assignment I used Wikipedia data from infamous business failures, frauds, or collapses using the MediaWiki API. These are denotes in def main() under a topics dictionary that pairs the case key (ex. 'svb) to a more specific wikipedia topic such as "Collapse of Silicon Valley Bank".
 
 I wanted to learn how to use API's and other natural language processing libraries to manipulate text. 
@@ -26,7 +26,7 @@ My goal was to learn how to use these tools - and learn how to search for the to
 
 Describe your implementation at a system architecture level. You should NOT walk through your code line by line, or explain every function (we can get that from your docstrings). Instead, talk about the major components, algorithms, data structures and how they fit together. You should also discuss at least one design decision where you had to choose between multiple alternatives, and explain why you made the choice. Use screenshots to describe how you used ChatGPT to help you or learn new things.
 
-# Implementation
+### Implementation
 
 I approached this project top-down approach starting with the functions to pull information from Wikipedia and then subseqent functions to analyze the text. I had to decide if to run the functions for each topic separate or use a dictionary to store all the information and then build separate functions to traverse and analyze. I also asked Chat GPT for suggestions regarding libraries I could use to summarize, find keywords, do frequency distributions, sentiment analysis, remove stop words, stem word list, find text similarity, generate markov analysis sentences, and GPTw Modeling.  
 
@@ -44,6 +44,8 @@ Then I created a function that would loop through the dictionary and run another
 I did my best to break up the code functionality into various functions. This was very useful practice in approaching problems and working on breaking them down into smaller components. 
 
 3. Results (~2-3 paragraphs + figures/examples)
+
+### Results
 
 Present what you accomplished in your project:
 
@@ -69,6 +71,9 @@ There are many more possible way to analyze the dictionary - however I chose to 
    
 
 4. Reflection (~1-2 paragraphs)
+
+
+### Reflection
 
 From a process point of view, what went well? What could you improve? Was your project appropriately scoped? Did you have a good testing plan?
 
