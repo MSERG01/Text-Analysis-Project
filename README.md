@@ -43,7 +43,7 @@ Then I created a function that would loop through the dictionary and run another
 
 I did my best to break up the code functionality into various functions. This was very useful practice in approaching problems and working on breaking them down into smaller components. 
 
-1. Results (~2-3 paragraphs + figures/examples)
+3. Results (~2-3 paragraphs + figures/examples)
 
 Present what you accomplished in your project:
 
@@ -52,29 +52,25 @@ If you created a program that does something interesting (e.g. a Markov text syn
 
 My def main() code (main() function) runs through all the functionality of the code with sample inputs. HOWEVER, there are many more possible inputs.  
 
-1. # Will generate summary statistics after running summarize_all on topics dictionary which stores all the data in one dictionary{}.
-    <img src="images/sample_statistics.png" width="400" alt="text clustering" style="display:block; margin:10px auto;"/>
+There are many more possible way to analyze the dictionary - however I chose to create generalized functions that would work with a standardized input and provided text summary of examples. 
 
-2. # Generates sentiment analysis for every topic summary and keyword and stores it in a dictionary + Includes text similarity function and example of SVB vs FTX
-    <img src="images/summary&keyword sentiment.png" width="400" alt="text clustering" style="display:block; margin:10px auto;"/>
 
-3. # Markov Text synthesizer generates 10 sentences based on specified topic and sample text -- in this example WeWork Summa Summary
+1. ### Will generate summary statistics after running summarize_all on topics dictionary which stores all the data in one dictionary{}.
+    <img src="images/sample_statistics_ftx.png" width="400" alt="text clustering" style="display:block; margin:10px auto;"/>
+
+2. ### Generates sentiment analysis for every topic summary and keyword and stores it in a dictionary + Includes text similarity function and example of SVB vs FTX
+    <img src="images/sentiment_and_similarity.png" width="400" alt="text clustering" style="display:block; margin:10px auto;"/>
+
+3. ### Markov Text synthesizer generates 10 sentences based on specified topic and sample text -- in this example WeWork Summa Summary
     <img src="images/markov_text_synthesis.png" width="400" alt="text clustering" style="display:block; margin:10px auto;"/>
 
-4. # GPT2 language model uses a trimming function to cut input text into useable size (summa summary too long) and attach prompt str ("This results in, ) and using pretrained model to generate text. 
+4. ### GPT2 language model uses a trimming function to cut input text into useable size (summa summary too long) and attach prompt str ("This results in, ) and using pretrained model to generate text. 
    <img src="images/gpt2_sample.png" width="400" alt="text clustering" style="display:block; margin:10px auto;"/> 
    
 
-
-
-
-
-
-
-
-
-5. Reflection (~1-2 paragraphs)
+4. Reflection (~1-2 paragraphs)
 
 From a process point of view, what went well? What could you improve? Was your project appropriately scoped? Did you have a good testing plan?
 
 From a learning perspective, mention what you learned through this project, how ChatGPT helped you, and how you'll use what you learned going forward. What do you wish you knew beforehand that would have helped you succeed?
+
