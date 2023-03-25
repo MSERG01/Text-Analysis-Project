@@ -30,7 +30,16 @@ Describe your implementation at a system architecture level. You should NOT walk
 
 I approached this project top-down approach starting with the functions to pull information from Wikipedia and then subseqent functions to analyze the text. I had to decide if to run the functions for each topic separate or use a dictionary to store all the information and then build separate functions to traverse and analyze. 
 
-![My Image](image.png)
+
+
+I also asked Chat GPT for suggestions regarding libraries I could use to summarize, find keywords, do frequency distributions, sentiment analysis, remove stop words, stem word list, find text similarity, generate markov analysis sentences, and GPTw Modeling.  
+![My Image](C:\Users\savilabermudez1\Documents\GitHub\Text-Analysis-Project\images\potential_topics.png)
+
+All of these were integrated with a nested dictionary data structure to simplify the subsequent functions. 
+
+Then I created a function that would loop through the dictionary and run another function for the specified result given a key. 
+
+I did my best to break up the code functionality into various functions. 
 
 1. Results (~2-3 paragraphs + figures/examples)
 
@@ -38,6 +47,9 @@ Present what you accomplished in your project:
 
 If you did some text analysis, what interesting things did you find? Graphs or other visualizations may be very useful here for showing your results.
 If you created a program that does something interesting (e.g. a Markov text synthesizer), be sure to provide a few interesting examples of the program's output.
+
+
+
 
 
 
