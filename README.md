@@ -74,3 +74,6 @@ From a process point of view, what went well? What could you improve? Was your p
 
 From a learning perspective, mention what you learned through this project, how ChatGPT helped you, and how you'll use what you learned going forward. What do you wish you knew beforehand that would have helped you succeed?
 
+I learned a lot about API and the power of open source libraries -- and how they allow me to generate surprisingly powerful outputs without creating the tools from scratch. I also learned how to plan the algorithms and break up the functionality of my functions. I could further improve by adding subsequent analysis that further adds onto the existing code. I would like to use Open AI APi to input summarized texts, keywords, and more and have it preform natural Language Processing and Analysis on it. I think the scope of this project was ambitious and properly scoped. I also spent a LONG time testing - ensuring models worked and troubleshooting errors. 
+
+Chapt GPT was useful in this regard - often pointing out mistakes or prompting me to download the correct or updated libraries when I could not figure out specific error prompt. Additionally, before this I wish I had known about more libraries in depth so I could do further analysis and applications without having to search for a library for that specific function. 
