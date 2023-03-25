@@ -6,6 +6,7 @@
         "pretrained",
         "sklearn",
         "stopwords",
+        "subseqent",
         "tfid",
         "Tfidf",
         "thefuzz",

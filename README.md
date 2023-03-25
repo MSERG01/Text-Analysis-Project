@@ -26,22 +26,13 @@ My goal was to learn how to use these tools - and learn how to search for the to
 
 Describe your implementation at a system architecture level. You should NOT walk through your code line by line, or explain every function (we can get that from your docstrings). Instead, talk about the major components, algorithms, data structures and how they fit together. You should also discuss at least one design decision where you had to choose between multiple alternatives, and explain why you made the choice. Use screenshots to describe how you used ChatGPT to help you or learn new things.
 
-# Implementation - Approach, Algo 
+# Implementation
 
+I approached this project top-down approach starting with the functions to pull information from Wikipedia and then subseqent functions to analyze the text. I had to decide if to run the functions for each topic separate or use a dictionary to store all the information and then build separate functions to traverse and analyze. 
 
+![My Image](image.png)
 
-
-
-
-
-image.png
-
-
-
-
-
-
-3. Results (~2-3 paragraphs + figures/examples)
+1. Results (~2-3 paragraphs + figures/examples)
 
 Present what you accomplished in your project:
 
