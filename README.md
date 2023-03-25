@@ -33,7 +33,7 @@ I approached this project top-down approach starting with the functions to pull 
 
 
 I also asked Chat GPT for suggestions regarding libraries I could use to summarize, find keywords, do frequency distributions, sentiment analysis, remove stop words, stem word list, find text similarity, generate markov analysis sentences, and GPTw Modeling.  
-![My Image](C:\Users\savilabermudez1\Documents\GitHub\Text-Analysis-Project\images\potential_topics.png)
+<img src="images/potential_topics.png" width="400" alt="text clustering" style="display:block; margin:10px auto;"/>
 
 All of these were integrated with a nested dictionary data structure to simplify the subsequent functions. 
 
