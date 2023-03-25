@@ -28,18 +28,20 @@ Describe your implementation at a system architecture level. You should NOT walk
 
 # Implementation
 
-I approached this project top-down approach starting with the functions to pull information from Wikipedia and then subseqent functions to analyze the text. I had to decide if to run the functions for each topic separate or use a dictionary to store all the information and then build separate functions to traverse and analyze. 
+I approached this project top-down approach starting with the functions to pull information from Wikipedia and then subseqent functions to analyze the text. I had to decide if to run the functions for each topic separate or use a dictionary to store all the information and then build separate functions to traverse and analyze. I also asked Chat GPT for suggestions regarding libraries I could use to summarize, find keywords, do frequency distributions, sentiment analysis, remove stop words, stem word list, find text similarity, generate markov analysis sentences, and GPTw Modeling.  
 
-
-
-I also asked Chat GPT for suggestions regarding libraries I could use to summarize, find keywords, do frequency distributions, sentiment analysis, remove stop words, stem word list, find text similarity, generate markov analysis sentences, and GPTw Modeling.  
+I also used Chapt GPT in initial brainstorming by asking it for text analysis ideas. 
 <img src="images/potential_topics.png" width="400" alt="text clustering" style="display:block; margin:10px auto;"/>
+
+I then used it to evaluate the libraries I was using to ensure they were adequate.  
+
+<img src="images/library_selection.png" width="400" alt="text clustering" style="display:block; margin:10px auto;"/>
 
 All of these were integrated with a nested dictionary data structure to simplify the subsequent functions. 
 
 Then I created a function that would loop through the dictionary and run another function for the specified result given a key. 
 
-I did my best to break up the code functionality into various functions. 
+I did my best to break up the code functionality into various functions. This was very useful practice in approaching problems and working on breaking them down into smaller components. 
 
 1. Results (~2-3 paragraphs + figures/examples)
 
@@ -48,6 +50,20 @@ Present what you accomplished in your project:
 If you did some text analysis, what interesting things did you find? Graphs or other visualizations may be very useful here for showing your results.
 If you created a program that does something interesting (e.g. a Markov text synthesizer), be sure to provide a few interesting examples of the program's output.
 
+My def main() code (main() function) runs through all the functionality of the code with sample inputs. HOWEVER, there are many more possible inputs.  
+
+1. # Will generate summary statistics after running summarize_all on topics dictionary which stores all the data in one dictionary{}.
+    <img src="images/sample_statistics.png" width="400" alt="text clustering" style="display:block; margin:10px auto;"/>
+
+2. # Generates sentiment analysis for every topic summary and keyword and stores it in a dictionary + Includes text similarity function and example of SVB vs FTX
+    <img src="images/summary&keyword sentiment.png" width="400" alt="text clustering" style="display:block; margin:10px auto;"/>
+
+3. # Markov Text synthesizer generates 10 sentences based on specified topic and sample text -- in this example WeWork Summa Summary
+    <img src="images/markov_text_synthesis.png" width="400" alt="text clustering" style="display:block; margin:10px auto;"/>
+
+4. # GPT2 language model uses a trimming function to cut input text into useable size (summa summary too long) and attach prompt str ("This results in, ) and using pretrained model to generate text. 
+   <img src="images/gpt2_sample.png" width="400" alt="text clustering" style="display:block; margin:10px auto;"/> 
+   
 
 
 
@@ -55,7 +71,9 @@ If you created a program that does something interesting (e.g. a Markov text syn
 
 
 
-4. Reflection (~1-2 paragraphs)
+
+
+5. Reflection (~1-2 paragraphs)
 
 From a process point of view, what went well? What could you improve? Was your project appropriately scoped? Did you have a good testing plan?
 
