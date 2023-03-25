@@ -37,11 +37,7 @@ I then used it to evaluate the libraries I was using to ensure they were adequat
 
 <img src="images/library_selection.png" width="400" alt="text clustering" style="display:block; margin:10px auto;"/>
 
-All of these were integrated with a nested dictionary data structure to simplify the subsequent functions. 
-
-Then I created a function that would loop through the dictionary and run another function for the specified result given a key. 
-
-I did my best to break up the code functionality into various functions. This was very useful practice in approaching problems and working on breaking them down into smaller components. 
+All of these were integrated with a nested dictionary data structure to simplify the subsequent functions. Then I created a function that would loop through the dictionary and run another function for the specified result given a key. I did my best to break up the code functionality into various functions. This was very useful practice in approaching problems and working on breaking them down into smaller components.This allowed for the end results that is easily editable.  
 
 3. Results (~2-3 paragraphs + figures/examples)
 
